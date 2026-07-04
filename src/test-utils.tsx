@@ -6,10 +6,6 @@ function AllProviders({ children }: { children: ReactNode }): React.JSX.Element 
 	return <MantineProvider>{ children }</MantineProvider>;
 }
 
-/**
- * Рендер компонента со всеми глобальными провайдерами (Mantine и т.д.).
- * Используй вместо стандартного render из @testing-library/react.
- */
 export function renderWithProviders(
 	ui: ReactElement,
 	options?: Omit<RenderOptions, 'wrapper'>,

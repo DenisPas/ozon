@@ -28,24 +28,45 @@ npm run test:watch # тесты в watch-режиме
 
 ## Структура
 
+Прагматичные слои. Правило зависимостей — строго сверху вниз:
+`app → pages → features → shared`. Обратные импорты запрещены, `shared` ни о ком не знает.
+
 ```
 src/
-  main.tsx            точка входа: React + MantineProvider + Router
-  App.tsx             корневой компонент с роутами и навигацией
+  main.tsx            точка входа: монтирует <AppProviders><App/></AppProviders>
   index.pcss          глобальные стили
-  vite-env.d.ts       типы для CSS Modules (.pcss/.css) и env
+  vite-env.d.ts       типы для CSS Modules и env-переменных
   setup-tests.ts      настройка Testing Library + моки для Mantine
   test-utils.tsx      renderWithProviders — рендер с провайдерами в тестах
-  pages/
-    home/             страница Home (компонент + .module.pcss + тест)
-    about/            страница About
+  app/                каркас приложения
+    app.tsx           корневой компонент: навигация + роуты
+    providers.tsx     все глобальные провайдеры (Mantine, Router, ...)
+  pages/              страницы-роуты (тонкие: собирают из features/shared)
+    home/  about/     компонент + .module.pcss (+ тест) рядом
+  shared/             переиспользуемое, ни от чего не зависит
+    api/              шов к бэкенду
+      client.ts       единственная обёртка над fetch (baseURL, авторизация, ошибки)
+      types.ts        ApiError, Paginated<T> и пр.
+      endpoints/      типизированные функции запросов по доменам (сервисный слой)
+    lib/              утилиты и хуки (напр. useAsync)
+    config/           env.ts, routes.ts — константы и настройки
+    ui/               общие презентационные компоненты (напр. ErrorState)
 ```
+
+`features/` появляется, когда возникнет первая самодостаточная фича — по тому же
+правилу зависимостей; вводить заранее не нужно.
 
 ## Как добавлять
 
-- **Страница:** по образцу `src/pages/home` — компонент, `*.module.pcss` рядом, роут в `App.tsx`.
-- **UI:** импортируй компоненты из `@mantine/core` (`Button`, `Group`, ...). Кастомные стили — в PCSS-модулях.
-- **Тесты:** используй `renderWithProviders` из `@/test-utils` вместо `render`, иначе Mantine-компоненты не получат провайдер.
+- **Страница:** папка в `src/pages/*` (компонент + `*.module.pcss` рядом), путь в
+  `@/shared/config/routes.ts`, роут в `src/app/app.tsx`.
+- **Запрос к API:** тип + функцию в `src/shared/api/endpoints/*` поверх `client`;
+  компоненты зовут эти функции, а не `fetch` напрямую. Данные тянутся через
+  `useAsync` (позже — через серверный стейт-менеджер без правок client).
+- **Общий UI:** компонент в `src/shared/ui/*`, экспорт из `@/shared/ui`.
+- **UI Mantine:** импортируй из `@mantine/core`. Кастомные стили — в PCSS-модулях.
+- **Тесты:** используй `renderWithProviders` из `@/test-utils` вместо `render`,
+  иначе Mantine-компоненты не получат провайдер.
 
 ## PCSS
 

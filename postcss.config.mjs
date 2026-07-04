@@ -4,16 +4,14 @@ import postcssSimpleVars from 'postcss-simple-vars';
 
 export default {
 	plugins: [
-		// Вложенность (& в .pcss), миксины light/dark, rem()/em() и пр.
-		postcssPresetMantine(),
-		// Брейкпоинты Mantine, доступные как $mantine-breakpoint-* в .pcss.
+		postcssPresetMantine({ autoRem: true }),
 		postcssSimpleVars({
 			variables: {
-				'mantine-breakpoint-xs': '36em',
-				'mantine-breakpoint-sm': '48em',
-				'mantine-breakpoint-md': '62em',
-				'mantine-breakpoint-lg': '75em',
-				'mantine-breakpoint-xl': '88em',
+				'mantine-breakpoint-xs': '576px',
+				'mantine-breakpoint-sm': '768px',
+				'mantine-breakpoint-md': '992px',
+				'mantine-breakpoint-lg': '1200px',
+				'mantine-breakpoint-xl': '1408px',
 			},
 		}),
 		autoprefixer(),
