@@ -1,0 +1,29 @@
+import '@testing-library/jest-dom';
+import { vi } from 'vitest';
+
+// Моки браузерных API, которых нет в jsdom, но которые нужны Mantine.
+const { getComputedStyle } = window;
+window.getComputedStyle = (element) => getComputedStyle(element);
+window.HTMLElement.prototype.scrollIntoView = () => {};
+
+Object.defineProperty(window, 'matchMedia', {
+	writable: true,
+	value: vi.fn().mockImplementation((query: string) => ({
+		matches: false,
+		media: query,
+		onchange: null,
+		addListener: vi.fn(),
+		removeListener: vi.fn(),
+		addEventListener: vi.fn(),
+		removeEventListener: vi.fn(),
+		dispatchEvent: vi.fn(),
+	})),
+});
+
+class ResizeObserver {
+	observe(): void {}
+	unobserve(): void {}
+	disconnect(): void {}
+}
+
+window.ResizeObserver = ResizeObserver;

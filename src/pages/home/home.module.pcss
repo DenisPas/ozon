@@ -1,0 +1,26 @@
+.home {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	align-items: flex-start;
+}
+
+.title {
+	margin: 0;
+	font-size: 48px;
+}
+
+.button {
+	padding: 8px 16px;
+	font-size: 16px;
+	cursor: pointer;
+	border: 1px solid #646cff;
+	border-radius: 8px;
+	background: transparent;
+	color: inherit;
+
+	/* Вложенность PCSS (postcss-nesting) */
+	&:hover {
+		background: rgb(100 108 255 / 10%);
+	}
+}
