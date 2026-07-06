@@ -14,7 +14,6 @@ export default defineConfig({
 	},
 	css: {
 		modules: {
-			// Читаемые имена классов в dev, хешированные в проде.
 			localsConvention: 'camelCaseOnly',
 		},
 	},

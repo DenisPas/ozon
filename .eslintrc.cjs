@@ -21,7 +21,6 @@ module.exports = {
 	ignorePatterns: ['dist', 'node_modules', '.eslintrc.cjs'],
 	overrides: [
 		{
-			// Тесты и тест-утилиты не участвуют в fast-refresh.
 			files: ['**/*.test.{ts,tsx}', 'src/test-utils.tsx', 'src/setup-tests.ts'],
 			rules: {
 				'react-refresh/only-export-components': 'off',

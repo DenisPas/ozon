@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
-// Моки браузерных API, которых нет в jsdom, но которые нужны Mantine.
 const { getComputedStyle } = window;
 window.getComputedStyle = (element) => getComputedStyle(element);
 window.HTMLElement.prototype.scrollIntoView = () => {};
